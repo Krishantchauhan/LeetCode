@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Binary Search Tree</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #canvas {
+            height: 400px;
+            margin-top: 20px;
+            overflow: auto;
+            position: relative;
+        }
+        .node {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 50%;
+            margin: 0 10px;
+            position: absolute;
+        }
+        .edge {
+            position: absolute;
+            background-color: #007bff;
+            height: 2px;
+            width: 0;
+            transition: width 0.2s ease-out;
+        }
+        .highlight {
+            background-color: #ff4500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Binary Search Tree</h1>
+    <div>
+        <input type="number" id="value" placeholder="Enter a value" />
+        <button onclick="insert()">Insert</button>
+        <button onclick="search()">Search</button>
+        <button onclick="reset()">Reset</button>
+    </div>
+    <div id="canvas"></div>
+
+    <script>
+        // Binary Search Tree class
+        class BST {
+            constructor() {
+                this.root = null;
+            }
+
+            // Insert a node into the BST
+            insert(value) {
+                const newNode = { value, left: null, right: null };
+
+                if (!this.root) {
+                    this.root = newNode;
+                } else {
+                    this.insertNode(this.root, newNode);
+                }
+            }
+
+            insertNode(node, newNode) {
+                if (newNode.value < node.value) {
+                    if (!node.left) {
+                        node.left = newNode;
+                    } else {
+                        this.insertNode(node.left, newNode);
+                    }
+                } else {
+                    if (!node.right) {
+                        node.right = newNode;
+                    } else {
+                        this.insertNode(node.right, newNode);
+                    }
+                }
+            }
+
+            // Search for a value in the BST
+            search(value) {
+                return this.searchNode(this.root, value);
+            }
+
+            searchNode(node, value) {
+                if (!node) {
+                    return false;
+                }
+
+                if (value === node.value) {
+                    return true;
+                }
+
+                if (value < node.value) {
+                    return this.searchNode(node.left, value);
+                }
+
+                return this.searchNode(node.right, value);
+            }
+        }
+
+        // Create a new BST instance
+        const bst = new BST();
+
+        function insert() {
+            const valueInput = document.getElementById('value');
+            const value = parseInt(valueInput.value);
+
+            if (!isNaN(value)) {
+                bst.insert(value);
+                drawBST();
+            }
+
+            valueInput.value = '';
+        }
+
+        function search() {
+            const valueInput = document.getElementById('value');
+            const value = parseInt(valueInput.value);
+
+            if (!isNaN(value)) {
+                const found = bst.search(value);
+                highlightNode(value, found);
+            }
+
+            valueInput.value = '';
+        }
+
+        function reset() {
+            bst.root = null;
+            drawBST();
+        }
+
+        function drawBST() {
+            const canvas = document.getElementById('canvas');
+            canvas.innerHTML = '';
+
+            const nodePositions = [];
+            calculateNodePositions(bst.root, 1, 0, 0);
+
+            drawNode(bst.root);
+
+            function calculateNodePositions(node, level, position, parentX) {
+                if (!node) {
+                    return;
+                }
+
+                if (!nodePositions[level]) {
+                    nodePositions[level] = [];
+                }
+
+                const nodeX = parentX + position * 60;
+
+                nodePositions[level][position] = nodeX;
+
+                calculateNodePositions(node.left, level + 1, position * 2, nodeX);
+                calculateNodePositions(node.right, level + 1, position * 2 + 1, nodeX);
+            }
+
+            function drawNode(node, level = 1, position = 0, parentX = 0) {
+                if (node) {
+                    const nodeElem = document.createElement('div');
+                    nodeElem.className = 'node';
+                    nodeElem.textContent = node.value;
+
+                    const nodeX = nodePositions[level][position];
+                    const nodeY = level * 80;
+
+                    nodeElem.style.left = nodeX + 'px';
+                    nodeElem.style.top = nodeY + 'px';
+
+                    canvas.appendChild(nodeElem);
+
+                    if (node.left) {
+                        const leftEdgeElem = document.createElement('div');
+                        leftEdgeElem.className = 'edge';
+                        leftEdgeElem.style.width = nodeX - nodePositions[level + 1][position * 2] + 'px';
+                        leftEdgeElem.style.left = nodePositions[level + 1][position * 2] + 'px';
+                        leftEdgeElem.style.top = nodeY - 20 + 'px';
+
+                        canvas.appendChild(leftEdgeElem);
+
+                        drawNode(node.left, level + 1, position * 2, nodeX);
+                    }
+
+                    if (node.right) {
+                        const rightEdgeElem = document.createElement('div');
+                        rightEdgeElem.className = 'edge';
+                        rightEdgeElem.style.width = nodePositions[level + 1][position * 2 + 1] - nodeX + 'px';
+                        rightEdgeElem.style.left = nodeX + 'px';
+                        rightEdgeElem.style.top = nodeY - 20 + 'px';
+
+                        canvas.appendChild(rightEdgeElem);
+
+                        drawNode(node.right, level + 1, position * 2 + 1, nodeX);
+                    }
+                }
+            }
+        }
+
+        function highlightNode(value, found) {
+            const nodes = document.querySelectorAll('.node');
+
+            nodes.forEach(node => {
+                node.classList.remove('highlight');
+
+                if (parseInt(node.textContent) === value) {
+                    if (found) {
+                        node.classList.add('highlight');
+                    } else {
+                        node.classList.add('highlight');
+                        setTimeout(() => {
+                            node.classList.remove('highlight');
+                        }, 1000);
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
