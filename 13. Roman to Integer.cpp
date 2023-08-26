@@ -1,7 +1,9 @@
-class Solution {
+class Solution
+{
 public:
-    int romanToInt(string s) {
-        unordered_map<char,int>mp;
+    int romanToInt(string s)
+    {
+        unordered_map<char, int> mp;
         mp['I'] = 1;
         mp['V'] = 5;
         mp['X'] = 10;
@@ -10,12 +12,13 @@ public:
         mp['D'] = 500;
         mp['M'] = 1000;
 
-        int sum=0;
-        for(int i=0;i<s.length();i++){
-            if(mp[s[i]] <  mp[s[i+1]])
-                sum-=mp[s[i]];
+        int sum = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (mp[s[i]] < mp[s[i + 1]])
+                sum -= mp[s[i]];
             else
-                sum+=mp[s[i]];
+                sum += mp[s[i]];
         }
         return sum;
     }
