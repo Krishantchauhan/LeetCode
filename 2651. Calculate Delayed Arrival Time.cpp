@@ -1,6 +1,8 @@
-class Solution {
+class Solution
+{
 public:
-    int findDelayedArrivalTime(int at, int dt) {
-        return (at+dt)%24;
+    int findDelayedArrivalTime(int at, int dt)
+    {
+        return (at + dt) % 24;
     }
 };
