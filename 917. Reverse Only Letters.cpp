@@ -1,15 +1,19 @@
-class Solution {
+class Solution
+{
 public:
-    string reverseOnlyLetters(string s) {
-        int low=0;
-        int high=s.length()-1;
-        while(low<high){
-            if(!isalpha(s[low]))
+    string reverseOnlyLetters(string s)
+    {
+        int low = 0;
+        int high = s.length() - 1;
+        while (low < high)
+        {
+            if (!isalpha(s[low]))
                 low++;
             else if (!isalpha(s[high]))
                 high--;
-            else{
-                swap(s[low],s[high]);
+            else
+            {
+                swap(s[low], s[high]);
                 low++;
                 high--;
             }
