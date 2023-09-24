@@ -9,15 +9,18 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    int sum=0;
-    int rangeSumBST(TreeNode* root, int low, int high) {
-        if(root!=NULL){
-            if(root->val<=high && root->val>=low)
-                sum=sum+root->val;
-            rangeSumBST(root->left,low,high);
-            rangeSumBST(root->right,low,high);
+    int sum = 0;
+    int rangeSumBST(TreeNode *root, int low, int high)
+    {
+        if (root != NULL)
+        {
+            if (root->val <= high && root->val >= low)
+                sum = sum + root->val;
+            rangeSumBST(root->left, low, high);
+            rangeSumBST(root->right, low, high);
         }
         return sum;
     }
