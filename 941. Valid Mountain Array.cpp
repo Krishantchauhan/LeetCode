@@ -1,9 +1,11 @@
-class Solution {
+class Solution
+{
 public:
-    bool validMountainArray(vector<int>& arr) {
+    bool validMountainArray(vector<int> &arr)
+    {
         if (arr.size() < 3)
             return false;
-        
+
         int low = 0, high = arr.size() - 1;
         while (low < arr.size() - 2 && arr[low] < arr[low + 1])
             low++;
